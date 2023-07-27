@@ -19,7 +19,7 @@ exports.create =(req,res)=>{
 exports.getAll = async (req,res)=>{
     try {
         const video = await Video.find();
-        res.json(video);
+        res.status(200).json({message:'Success', data:video});
     } catch (error) {
         res.status(500).json({message:error.message})
     }

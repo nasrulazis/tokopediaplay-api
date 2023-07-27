@@ -7,7 +7,7 @@ exports.create = async (req, res) => {
         const video = await Video.findById(videoId);
 
         if (!video) {
-            return res.status(400).json({ message: "Video not found" });
+            return res.status(400).json({ message: "Video doesn't exist" });
         } else {
             const comment = new Comment({
                 username: req.body.username,
@@ -31,8 +31,12 @@ exports.create = async (req, res) => {
 
 exports.getAll = async (req,res)=>{
     try {
-        const comment = await Video.findById(req.params.videoid).populate('comments');
-        res.status(200).json({data : comment.comments});
+        const comment = await Video.findById(req.params.videoid).populate("comments");
+        if (!comment) {
+            res.status(400).json({error:"Video doesn't exist"})
+        } else {
+            res.status(200).json({message:"Success",data:comment.comments});
+        }
     } catch (error) {
         res.status(500).json({message:error.message})
     }

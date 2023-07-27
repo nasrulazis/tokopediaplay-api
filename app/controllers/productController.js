@@ -32,8 +32,12 @@ exports.create = async (req, res) => {
 
 exports.getAll = async (req,res)=>{
     try {
-        const product = await Video.findById(req.params.videoid).populate("products").exec();
-        res.json(product.products);
+        const product = await Video.findById(req.params.videoid).populate("products");
+        if (!product) {
+            res.status(400).json({error:"Video doesn't exist"})
+        } else {
+            res.status(200).json({message:"Success",data:product.products});
+        }
     } catch (error) {
         res.status(500).json({message:error.message})
     }
